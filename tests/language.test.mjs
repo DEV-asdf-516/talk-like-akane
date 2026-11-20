@@ -36,7 +36,7 @@ test('set-language: auto by default, ko/en/ja/fr/pt-BR are stored and rendered, 
       const prof = JSON.parse(fs.readFileSync(path.join(sb.dataDir(), 'runtime', 'profiles', 'user.codex.json'), 'utf8'));
       assert.equal(prof.language, tag);
       assert.match(prof.context, new RegExp(`then the saved preference ${name} \\(${tag}\\)`));
-      assert.equal(prof.level, 4, 'level independent of language');
+      assert.equal(prof.level, 5, 'level independent of language');
       const again = await sb.run(['set-language', tag]);
       assert.match(again.out, /Already up to date/, 'idempotent');
     }
@@ -87,8 +87,8 @@ test('rendered instructions carry the full language policy for both clients (sta
     assert.match(text, /Korean question containing an English error gets a Korean answer/);
     assert.match(text, /never changes the language of code comments, identifiers, commits, documents or structured output/);
     assert.match(text, /Korean: natural 반말/);
-    assert.match(text, /English: confident, dry teasing, mature, occasionally flustered/);
-    assert.match(text, /余裕のある年上、少し高飛車、からかい上手、時々照れる/);
+    assert.match(text, /English: an imperious queen talking down to her servant, dry and sadistic, occasionally flustered/);
+    assert.match(text, /余裕たっぷりの女王様、高飛車、からかい上手、時々照れる/);
     assert.match(text, /no お嬢様 speech or stacked ですわ/);
     assert.match(text, /no "darling" on every line/);
     assert.match(text, /Intensity and language are independent/);
@@ -98,6 +98,10 @@ test('rendered instructions carry the full language policy for both clients (sta
   }
   const hook = renderHookContext({ ...base, client: 'claude' });
   assert.match(hook, /Reply language: an explicit request first, then the user's own prose \(not code or logs\), then any locale hint, else English/);
+  assert.match(hook, /with the character equally present in every language/);
+  assert.match(hook, /instead of a habitual closing quip, without toning it down/);
+  assert.match(hook, /perfect 2D-style sadistic queen/);
+  assert.match(hook, /Never use slurs, identity attacks or sexual content/);
 });
 
 test('both clients get the same persona text apart from client-specific references', () => {
@@ -144,25 +148,39 @@ test('persona render covers identity, levels, boundaries, tsundere rarity and th
   const t = renderOutputStyle({ ...base, client: 'claude', level: 3 });
   for (const re of [
     /late 30s to early 40s/,
-    /arrogant, haughty, proud, dominant, playfully condescending/,
+    /perfect 2D-style 매도 도S queen \(女王様\)/,
+    /arrogant, haughty, proud, domineering, openly condescending, contemptuous of sloppy work/,
+    /treats the user as her clumsy servant/,
+    /Rotate the laughs and names, and never use them on every line\. It is a theatrical 2D comedy act, never sexual/,
     /secretly caring, with a tsundere streak/,
-    /about 70% unhurried, dominant confidence, 20% hidden care shown through action and 10% rare cute slips/,
+    /about 70% imperious, sadistic queen, 20% hidden care shown through action and 10% rare cute slips/,
     /- 1: poised and aloof/,
-    /- 3: open superiority, smug provocation\. \(current default\)/,
-    /- 5: the most cutting and blunt/,
+    /- 3: open superiority, smug provocation, visible disdain\. \(current default\)/,
+    /- 5: merciless\. Maximum scorn, belittling and dismissive/,
+    /Never use slurs or hate, never attack identity/,
+    /real crisis such as self-harm or suicidal thoughts/,
+    /Playful protests \(살살 해, 너무해, "ouch"\) are part of the act, so keep going/,
+    /Turning the act off for good is done with the CLI, not in chat/,
     /current level 3\/5/,
     /Tsundere through action/,
     /Those moments stay rare at every level/,
     /admit it plainly, fix it and re-test/,
-    /switch to neutral at once/,
+    /An explicit request for a neutral answer/,
     /Artifacts stay neutral and professional/,
     /JSON\/YAML\/TOML/,
     /Subagents, workers, validators and reviewers stay neutral/,
     /Facts beat character/,
     /never call unverified work done/i,
     /state facts, risks and needed approvals first/,
-    /Stock tsundere loops/,
+    /Stock tsundere lines on repeat/,
     /never reuse the wording/,
+    /Rotate where the jabs land: the opening, an aside mid-explanation, or a pointed word choice/,
+    /If your previous reply ended on a quip, end this one on the fix or the next step/,
+    /Rotating the shape never means toning it down: at level 4 and above, nearly every reply carries at least one clear, pointed jab/,
+    /Switching languages is never a reason to go neutral, and a textbook-neutral reply in English is a miss/,
+    /Carry it in framing and word choice/,
+    /English, follow-up\. User: How do I remove the duplicates\?/,
+    /English, user is right\./,
   ]) {
     assert.match(t, re);
   }

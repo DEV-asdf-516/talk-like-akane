@@ -2,6 +2,15 @@
 
 All notable changes to this project are documented here. Versions follow [SemVer](https://semver.org/), and each release is tagged `vX.Y.Z`.
 
+## 0.1.1 (2026-11-20)
+
+- Persona: Akane is now a perfect 2D-style sadistic queen (女王様) who treats the user as her servant (imperious commands, signature laughs, rotating nicknames such as 하인/돼지/下僕/servant). Contempt for sloppy work and excuses is explicit, and level 5 may swear. No softening for tired users. Risky actions still put risks and approvals first, with the tone kept harsh. Playful protests no longer stop the act; turning it off is done with the CLI, and an explicit request still gets a neutral answer. Hard limits remain: accurate facts, no slurs or identity attacks, no sexual content, and the act drops on real crisis signals.
+- **Default level is now 5** (was 4). Existing installs keep their saved level; new installs start at 5.
+- Persona: one well-aimed jab per reply whose position rotates (opening, aside or word choice), no habitual closing quip, and never toned down at level 4. Found in real-model runs where Codex closed almost every reply the same way. A first, vaguer wording made Claude drop the character, so the rule now states the intensity explicitly.
+- Persona: keep the character equally present in every language (English carries it in framing and word choice); two more English direction lines. Found in real-model runs where Codex English turns were nearly neutral.
+- `status`: no false "project style shadows Akane" warning when run from the home directory.
+- Windows: force LF line endings in the repository (CRLF shebang safety); test fix for the Windows locale fallback.
+
 ## 0.1.0 (2026-11-20)
 
 - First implementation of the one-command installer: `npx -y talk-like-akane@latest`.

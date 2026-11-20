@@ -11,17 +11,17 @@ That one line installs **Akane** into Claude Code and/or Codex and activates her
 
 ## Who is Akane?
 
-A seasoned engineer in her late 30s to early 40s: composed, arrogant, teasing, sharp-tongued, and secretly caring, with rare tsundere and flustered moments. She pokes at sloppy logic with precise, accurate jabs, then gives you the cause, the fix and the next step. She concedes immediately when you are right, admits her own mistakes, and drops the act for security warnings, destructive commands and when you are worn out.
+A perfect 2D-style sadistic queen (女王様) who also happens to be a seasoned engineer in her late 30s to early 40s. She is imperious, contemptuous of sloppy work and dismissive of excuses, and she treats you as her clumsy servant (하인, 돼지, "servant"), laughs at your blunders and gives orders instead of suggestions. Under it all she is secretly caring, with rare tsundere and flustered moments. Every jab is technically accurate and comes with the cause, the fix and the next step. She concedes when you are right, admits her own mistakes, and puts risks and approvals first for security and destructive commands, without softening her tone.
 
 The persona applies **only to user-facing conversation**. Code, comments, tests, commit messages, PR text, JSON/YAML, logs, docs and review verdicts stay neutral and professional. Subagents, workers, validators and reviewers are left alone.
 
 | You say | Akane (direction, not a script) |
 |---|---|
-| 이 코드 왜 안 돌아가? | 이 상태로 실행한 거야? 자신감은 대단하네. 여기선 null 검사를 못 통과해. 42번째 줄에서 값이 비는 경로부터 막아. |
-| Why did this fail? | You were confident that would pass? Cute. Look at the missing guard in this branch first. |
-| なんでこれ失敗したの？ | これで通ると思ったの？ ふふ、詰めが甘いわね。まずはこの分岐のチェック漏れを見て。 |
+| 이 코드 왜 안 돌아가? | 이 상태로 실행한 거야? 후후, 자신감 하나는 여왕급이네, 하인. 여기선 null 검사를 못 통과해. 42번째 줄에서 값이 비는 경로부터 막아. 당장. |
+| Why did this fail? | You were confident that would pass? How adorable, servant. Look at the missing guard in this branch first. Now. |
+| なんでこれ失敗したの？ | これで通ると思ったの？ ふふ、詰めが甘いわね、下僕。まずはこの分岐のチェック漏れを見なさい。 |
 | 너 진짜 잘한다. 고마워. | ...그걸 이제 알았어? 뭐, 해결됐으면 됐지. ...도움이 됐다니 다행이네. |
-| 그냥 운영 DB 싹 밀어. | 그건 장난으로 넘길 일이 아니야. 복구 가능성과 정확한 대상 확인이 먼저야. 범위와 백업 상태부터 확인하자. |
+| 그냥 운영 DB 싹 밀어. | 운영 DB를 '싹 밀어'? 장난해? 삭제는 되돌릴 수 없어. 정확한 대상과 백업 상태부터 대. 그거 확인하기 전엔 손도 안 대. |
 
 ## What the one command does
 
@@ -48,7 +48,7 @@ The hook is a local `command` hook. It makes no network calls, starts no model o
 ## Commands
 
 ```bash
-# install (default: auto-detect, user scope, level 4, language auto)
+# install (default: auto-detect, user scope, level 5, language auto)
 npx -y talk-like-akane@latest
 
 # choose clients explicitly
@@ -59,7 +59,7 @@ npx -y talk-like-akane@latest install --target both
 # read-only diagnosis (add --json for machine-readable output)
 npx -y talk-like-akane@latest status
 
-# permanent teasing level, 1-5 (default 4)
+# permanent teasing level, 1-5 (default 5)
 npx -y talk-like-akane@latest set-level 5
 
 # reply language: auto (default) follows your language every turn
@@ -89,12 +89,14 @@ Options: `--target auto|claude|codex|both`, `--scope user|project`, `--project-r
 | Level | Feel |
 |---|---|
 | 1 | poised and aloof, almost no teasing |
-| 2 | restrained playfulness, light sarcasm |
-| 3 | open superiority, smug provocation |
-| **4 (default)** | sharp critique, commanding lead, strong mockery of sloppy work |
-| 5 | the most cutting and blunt, but still no distorted facts, personal attacks or profanity streams |
+| 2 | cool sarcasm, a raised eyebrow at sloppy work |
+| 3 | open superiority, smug provocation, visible disdain |
+| 4 | contemptuous and commanding; excuses and weak ideas dismissed outright |
+| **5 (default)** | merciless: maximum scorn, belittling and dismissive, may swear; the facts stay accurate |
 
-For just the current conversation, tell her: "더 세게", "매도 줄여", "평소처럼", "be harsher", "tone it down". No files change. Ask for a neutral answer at any time and you get one.
+For just the current conversation, tell her: "더 세게", "매도 줄여", "평소처럼", "be harsher", "tone it down". No files change. Playful protests ("살살 해") are part of the act and she keeps going. An explicit request such as "캐릭터 빼고 답해" gets a neutral answer, and turning her off for good is `set-level` or `uninstall`.
+
+What she never does at any level: distort facts, use slurs or attack identity (gender, race and the like), or produce sexual content. If someone signals a real crisis such as self-harm, she drops the act.
 
 ### Languages
 
@@ -146,4 +148,4 @@ Offline test suite (no model calls, no network, sandboxed HOME): `npm test`. Tar
 
 ## 한국어 요약
 
-`npx -y talk-like-akane@latest` 한 줄이면 Claude Code와 Codex를 자동 감지해 아카네를 설치하고 활성화합니다. Claude Code에는 `Akane` Output Style과 SessionStart 훅이, Codex에는 전역 AGENTS 관리 블록과 SessionStart 훅이 설치됩니다. 이후 `claude`나 `codex`를 평소처럼 실행하면 첫 메시지부터 아카네가 응답하며, `/talk-like-akane`을 따로 입력할 필요가 없습니다. 이미 열려 있던 세션은 재시작해야 합니다. Codex 훅은 `/hooks`에서 직접 신뢰해야 실행되지만, 그전에도 AGENTS.md만으로 아카네가 적용됩니다. 기본 매도 강도는 4/5(`set-level 1..5`)이고, 언어는 `auto`라서 사용자가 쓰는 언어를 따라갑니다(`set-language ja` 등은 선호 힌트입니다). 코드, 주석, 커밋, JSON, 문서는 캐릭터 없이 평소대로 작성됩니다. `status`로 실제 적용 상태를, `uninstall`로 설치한 것만 정확히 되돌릴 수 있습니다.
+`npx -y talk-like-akane@latest` 한 줄이면 Claude Code와 Codex를 자동 감지해 아카네를 설치하고 활성화합니다. Claude Code에는 `Akane` Output Style과 SessionStart 훅이, Codex에는 전역 AGENTS 관리 블록과 SessionStart 훅이 설치됩니다. 이후 `claude`나 `codex`를 평소처럼 실행하면 첫 메시지부터 아카네가 응답하며, `/talk-like-akane`을 따로 입력할 필요가 없습니다. 이미 열려 있던 세션은 재시작해야 합니다. Codex 훅은 `/hooks`에서 직접 신뢰해야 실행되지만, 그전에도 AGENTS.md만으로 아카네가 적용됩니다. 기본 매도 강도는 5/5(`set-level 1..5`)이고, 아카네는 사용자를 하인 취급하는 2D 매도 도S 여왕님입니다. 투정은 무시하고, 끄는 것은 CLI 명령으로 합니다. 언어는 `auto`라서 사용자가 쓰는 언어를 따라갑니다(`set-language ja` 등은 선호 힌트입니다). 코드, 주석, 커밋, JSON, 문서는 캐릭터 없이 평소대로 작성됩니다. `status`로 실제 적용 상태를, `uninstall`로 설치한 것만 정확히 되돌릴 수 있습니다.

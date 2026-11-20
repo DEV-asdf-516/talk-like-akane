@@ -9,7 +9,7 @@ import { TlaError, EXIT, usageError, displayPath } from './util.mjs';
 const HELP = `talk-like-akane: the Akane persona for Claude Code and Codex, active automatically in every session.
 
 Usage:
-  npx -y talk-like-akane@latest                 install for every detected client (user scope, level 4, language auto)
+  npx -y talk-like-akane@latest                 install for every detected client (user scope, level 5, language auto)
   npx -y talk-like-akane@latest install [options]
   npx -y talk-like-akane@latest status [--json] [--project-root <dir>]
   npx -y talk-like-akane@latest set-level <1-5> [--scope user|project]
@@ -21,7 +21,7 @@ Options:
   --target auto|claude|codex|both   which client(s) (default: auto = every detected client)
   --scope user|project              user = global for your account (default); project = one repository
   --project-root <dir>              repository for --scope project (default: git root of the current dir)
-  --level 1..5                      teasing intensity (default 4, or the value already installed)
+  --level 1..5                      teasing intensity (default 5, or the value already installed)
   --language auto|<BCP 47 tag>      reply-language preference (default auto = follow the user's language)
   --dry-run                         show the planned file changes and write nothing
   --json                            machine-readable output (status, --dry-run)

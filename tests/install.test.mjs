@@ -14,12 +14,12 @@ function frontmatter(text) {
   return Object.fromEntries(m[1].split('\n').map((l) => [l.slice(0, l.indexOf(':')), l.slice(l.indexOf(':') + 1).trim()]));
 }
 
-test('no-argument run installs for every detected client with user scope, level 4, language auto', async () => {
+test('no-argument run installs for every detected client with user scope, level 5, language auto', async () => {
   const sb = makeSandbox({ claude: true, codex: true });
   try {
     const r = await sb.run([]);
     assert.equal(r.code, 0, r.err);
-    assert.match(r.out, /level 4\/5/);
+    assert.match(r.out, /level 5\/5/);
     assert.match(r.out, /language auto/);
     assert.equal(sb.readJson('.claude', 'settings.json').outputStyle, 'Akane');
     assert.ok(fs.existsSync(sb.p(...STYLE)));
@@ -28,7 +28,7 @@ test('no-argument run installs for every detected client with user scope, level 
     assert.match(sb.read('.codex', 'AGENTS.md'), /<!-- talk-like-akane:start -->[\s\S]*<!-- talk-like-akane:end -->/);
     assert.equal(sb.readJson('.codex', 'hooks.json').hooks.SessionStart.length, 1);
     const st = sb.state();
-    assert.equal(st.installs.user.level, 4);
+    assert.equal(st.installs.user.level, 5);
     assert.equal(st.installs.user.language, 'auto');
     assert.deepEqual(Object.keys(st.installs.user.targets).sort(), ['claude', 'codex']);
     assert.ok(!/token|secret|password/i.test(JSON.stringify(st)), 'state holds no secrets');
@@ -203,18 +203,18 @@ test('re-install is idempotent; set-level and update are applied without duplica
     assert.match(again.out, /Already up to date/);
     assert.deepEqual(snapshot(sb.home), snap1, 'second run writes nothing');
 
-    assert.equal((await sb.run(['set-level', '5'])).code, 0);
-    assert.match(sb.read(...STYLE), /current level 5\/5/);
-    assert.match(sb.read(...STYLE), /- 5: [^\n]*\(current default\)/);
-    assert.match(sb.read('.codex', 'AGENTS.md'), /current level 5\/5/);
-    assert.equal(sb.state().installs.user.level, 5);
+    assert.equal((await sb.run(['set-level', '3'])).code, 0);
+    assert.match(sb.read(...STYLE), /current level 3\/5/);
+    assert.match(sb.read(...STYLE), /- 3: [^\n]*\(current default\)/);
+    assert.match(sb.read('.codex', 'AGENTS.md'), /current level 3\/5/);
+    assert.equal(sb.state().installs.user.level, 3);
     const prof = JSON.parse(fs.readFileSync(path.join(sb.dataDir(), 'runtime', 'profiles', 'user.claude.json'), 'utf8'));
-    assert.equal(prof.level, 5);
-    assert.match(prof.context, /teasing level 5\/5/);
+    assert.equal(prof.level, 3);
+    assert.match(prof.context, /teasing level 3\/5/);
 
-    // A plain re-run keeps the saved level (it does not reset to 4).
+    // A plain re-run keeps the saved level (it does not reset to the default).
     assert.equal((await sb.run([])).code, 0);
-    assert.equal(sb.state().installs.user.level, 5);
+    assert.equal(sb.state().installs.user.level, 3);
     const up = await sb.run(['update']);
     assert.equal(up.code, 0);
     assert.match(up.out, /Already up to date/);
@@ -225,9 +225,9 @@ test('re-install is idempotent; set-level and update are applied without duplica
     assert.equal(sb.readJson('.claude', 'settings.json').hooks.SessionStart.length, 1);
     assert.equal(sb.readJson('.codex', 'hooks.json').hooks.SessionStart.length, 1);
 
-    assert.equal((await sb.run(['set-level', '4'])).code, 0);
+    assert.equal((await sb.run(['set-level', '5'])).code, 0);
     const noState = (snap) => Object.fromEntries(Object.entries(snap).filter(([k]) => !k.endsWith('state.json')));
-    assert.deepEqual(noState(snapshot(sb.home)), noState(snap1), 'back to level 4 = identical files (state only records timestamps)');
+    assert.deepEqual(noState(snapshot(sb.home)), noState(snap1), 'back to the default level = identical files (state only records timestamps)');
   } finally {
     sb.cleanup();
   }

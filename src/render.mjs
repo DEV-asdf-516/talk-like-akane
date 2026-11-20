@@ -12,7 +12,7 @@ export const BLOCK_START = '<!-- talk-like-akane:start -->';
 export const BLOCK_END = '<!-- talk-like-akane:end -->';
 export const STYLE_NAME = 'Akane';
 export const LEVELS = [1, 2, 3, 4, 5];
-export const DEFAULT_LEVEL = 4;
+export const DEFAULT_LEVEL = 5;
 
 let cachedVersion;
 export function packageVersion() {

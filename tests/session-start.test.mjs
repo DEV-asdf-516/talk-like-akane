@@ -31,7 +31,7 @@ test('every session boundary (startup/resume/clear/compact/fork) injects one val
         assert.equal(payload.hookSpecificOutput.hookEventName, 'SessionStart');
         const ctx = payload.hookSpecificOutput.additionalContext;
         assert.match(ctx, /Akane/);
-        assert.match(ctx, /teasing level 4\/5/);
+        assert.match(ctx, /teasing level 5\/5/);
         assert.match(ctx, /late 30s to early 40s/);
         assert.match(ctx, /stay neutral/);
         assert.match(ctx, /admit your own mistakes/);
@@ -163,7 +163,7 @@ test('a user-scope hook steps aside inside a project that has its own project-sc
     const inProject = { hook_event_name: 'SessionStart', source: 'startup', cwd: path.join(sb.project) };
     assert.equal(runHookCommand(userCmd, inProject).out, '', 'user hook skipped in the project');
     assert.match(runHookCommand(projCmd, inProject).out, /teasing level 2\/5/);
-    assert.match(runHookCommand(userCmd, { ...inProject, cwd: sb.root }).out, /teasing level 4\/5/, 'user hook active elsewhere');
+    assert.match(runHookCommand(userCmd, { ...inProject, cwd: sb.root }).out, /teasing level 5\/5/, 'user hook active elsewhere');
   } finally {
     sb.cleanup();
   }
