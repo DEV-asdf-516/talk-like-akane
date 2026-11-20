@@ -1,0 +1,2 @@
+# Force LF everywhere: a CRLF shebang ("node\r") breaks the bin on macOS/Linux.
+* text=auto eol=lf

@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import { makeSandbox, snapshot, runHookCommand, ourHookCommand } from './helpers.mjs';
+import { makeSandbox, snapshot, runHookCommand, ourHookCommand, IS_WIN } from './helpers.mjs';
 import { normalizeLanguage } from '../src/locale.mjs';
 import { envLocaleHint, buildContext } from '../src/hook-runner.mjs';
 import { renderOutputStyle, renderAgentsBlock, renderHookContext, renderPersonaBody } from '../src/render.mjs';
@@ -126,8 +126,15 @@ test('the live hook passes the locale hint through without forcing a language', 
     const withHint = JSON.parse(runHookCommand(cmd, { hook_event_name: 'SessionStart', source: 'startup' }, { LANG: 'ja_JP.UTF-8' }).out);
     assert.match(withHint.hookSpecificOutput.additionalContext, /lowest priority[^.]*: ja-JP\./);
     const without = JSON.parse(runHookCommand(cmd, { hook_event_name: 'SessionStart', source: 'startup' }, { LANG: 'C' }).out);
-    assert.ok(!/locale hint \(/.test(without.hookSpecificOutput.additionalContext));
-    assert.match(without.hookSpecificOutput.additionalContext, /else English/);
+    const ctx = without.hookSpecificOutput.additionalContext;
+    if (IS_WIN) {
+      // Windows has no LANG convention, so the user's OS locale (via Intl) is the documented fallback hint.
+      const m = /locale hint \(lowest priority[^)]*\): ([^.]+)\.$/.exec(ctx);
+      if (m) assert.equal(m[1], envLocaleHint({}, 'win32'));
+    } else {
+      assert.ok(!/locale hint \(/.test(ctx), 'LANG=C gives no hint on POSIX');
+    }
+    assert.match(ctx, /else English/);
   } finally {
     sb.cleanup();
   }
