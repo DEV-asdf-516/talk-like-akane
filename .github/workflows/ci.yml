@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: ${{ matrix.os }} / Node ${{ matrix.node }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        node: [22, 24]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Unit + integration tests (offline, sandboxed HOME, no model calls)
+        run: npm test
+      - name: Tarball contents
+        run: npm run pack:check
+      - name: Tarball smoke via npx (isolated HOME, offline cache)
+        shell: bash
+        run: |
+          set -euo pipefail
+          TMP="$(mktemp -d)"
+          npm pack --pack-destination "$TMP" --ignore-scripts >/dev/null
+          TGZ="$(ls "$TMP"/talk-like-akane-*.tgz)"
+          mkdir -p "$TMP/home/.codex" "$TMP/home/.claude"
+          export HOME="$TMP/home" USERPROFILE="$TMP/home" LOCALAPPDATA="$TMP/home/AppData/Local"
+          export npm_config_cache="$TMP/cache" npm_config_offline=true npm_config_update_notifier=false
+          npx -y --package="$TGZ" talk-like-akane
+          npx -y --package="$TGZ" talk-like-akane status
+          npx -y --package="$TGZ" talk-like-akane set-level 5
+          npx -y --package="$TGZ" talk-like-akane uninstall

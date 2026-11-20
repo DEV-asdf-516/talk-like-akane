@@ -1,0 +1,48 @@
+{
+  "name": "talk-like-akane",
+  "version": "0.1.0",
+  "description": "One command installs Akane, an arrogant, teasing, secretly caring senior-engineer persona, into Claude Code and Codex. It activates automatically at every session start, and code and artifacts stay neutral.",
+  "type": "module",
+  "bin": {
+    "talk-like-akane": "bin/talk-like-akane.mjs"
+  },
+  "files": [
+    "bin/",
+    "src/",
+    "persona/",
+    "skills/",
+    "CHANGELOG.md"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test --test-reporter=spec \"tests/*.test.mjs\"",
+    "pack:check": "node scripts/pack-check.mjs",
+    "release:check": "node scripts/release-check.mjs"
+  },
+  "keywords": [
+    "claude-code",
+    "codex",
+    "persona",
+    "output-style",
+    "agents-md",
+    "session-start",
+    "hooks",
+    "skill",
+    "cli"
+  ],
+  "license": "MIT",
+  "author": "talk-like-akane contributors",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DEV-asdf-516/talk-like-akane.git"
+  },
+  "homepage": "https://github.com/DEV-asdf-516/talk-like-akane#readme",
+  "bugs": {
+    "url": "https://github.com/DEV-asdf-516/talk-like-akane/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

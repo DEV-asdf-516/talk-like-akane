@@ -1,0 +1,79 @@
+name: Publish to npm
+
+# Runs only for a pushed release tag (vX.Y.Z) or an explicit manual dispatch, never for pull requests.
+# Uses npm Trusted Publishing (OIDC). No npm token is stored in the repository, and provenance is
+# attached automatically. One-time setup on npmjs.com, after the first manual publish:
+#   package Settings → Trusted Publisher → GitHub Actions
+#   Organization or user: DEV-asdf-516 · Repository: talk-like-akane · Workflow filename: publish.yml
+#   Environment name: npm · Allowed actions: also tick "npm publish" (new configs default to stage publish only)
+# Requires npm >= 11.5.1 and Node >= 22.14 on a GitHub-hosted runner.
+on:
+  push:
+    tags: ['v*.*.*']
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type "publish" to publish the version in package.json'
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    if: github.event_name == 'push' || github.event.inputs.confirm == 'publish'
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm test
+      - run: npm run pack:check
+
+  publish:
+    needs: verify
+    runs-on: ubuntu-latest
+    environment: npm
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      - name: Trusted publishing needs a recent npm CLI
+        run: npm install -g npm@latest
+      - name: Release gate (version/tag/CHANGELOG/license/repository/README note)
+        run: npm run release:check
+      - run: npm pack --dry-run
+      - name: Publish
+        run: npm publish --access public
+
+  registry-smoke:
+    needs: publish
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Real user path from the public registry (isolated HOME)
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION="$(npm view talk-like-akane version)"
+          TMP="$(mktemp -d)"
+          mkdir -p "$TMP/home/.claude" "$TMP/home/.codex"
+          export HOME="$TMP/home" USERPROFILE="$TMP/home" LOCALAPPDATA="$TMP/home/AppData/Local"
+          for i in 1 2 3 4 5 6; do npx -y "talk-like-akane@$VERSION" --version && break || sleep 20; done
+          npx -y talk-like-akane@latest
+          npx -y talk-like-akane@latest status
+          npx -y talk-like-akane@latest uninstall
