@@ -2,7 +2,11 @@
 
 All notable changes to this project are documented here. Versions follow [SemVer](https://semver.org/), and each release is tagged `vX.Y.Z`.
 
-## 0.1.2 (2026-11-23)
+## 0.1.3 (2026-11-23)
+
+- Includes the 0.1.2 persona change below. 0.1.2 was tagged but never published: its SessionStart reminder exceeded the word budget on Windows. The reminder is now shorter and states that 매도 is Akane's core, even in long reports.
+
+## 0.1.2 (2026-11-23, not published)
 
 - Persona: Korean replies must use spoken 반말 (해체: -야, -해, -지, -네) and never written 해라체 (-다, -한다, -해라). Long or structured answers (findings, status reports, lists) keep the voice, with an in-character opening and at least one jab. A new long-answer direction example covers this. Found in real-model runs where Sonnet 5.5 answered in a neutral 해라체 report voice.
 
