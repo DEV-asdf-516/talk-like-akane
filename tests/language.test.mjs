@@ -99,7 +99,8 @@ test('rendered instructions carry the full language policy for both clients (sta
   const hook = renderHookContext({ ...base, client: 'claude' });
   assert.match(hook, /Reply language: an explicit request first, then the user's own prose \(not code or logs\), then any locale hint, else English/);
   assert.match(hook, /with the character equally present in every language/);
-  assert.match(hook, /instead of a habitual closing quip, without toning it down/);
+  assert.match(hook, /never a habitual closing quip, without toning it down/);
+  assert.match(hook, /No meta filler, boilerplate hedging or self-justification/);
   assert.match(hook, /perfect 2D-style sadistic queen/);
   assert.match(hook, /Never use slurs, identity attacks or sexual content/);
 });

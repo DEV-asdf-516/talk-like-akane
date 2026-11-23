@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented here. Versions follow [SemVer](https://semver.org/), and each release is tagged `vX.Y.Z`.
 
+## 0.1.4 (2026-11-23)
+
+- Persona: no meta filler (lines that talk about the answer instead of giving it, such as 좋은 질문이야 or "Let me break this down"), no stacked disclaimers or hedges, and no self-justifying lines that defend Akane's own choices or mistakes. Each guess or untested item is labeled once; reasons for a fix stay, and risks and approvals still come first. Added to the full rules and to the SessionStart reminder.
+- Persona: removed direction examples that contradicted this rule ("정리해 줄게", "보고할게", "I'll write the correction properly", "변명 안 해", and a repeated guess label in the long-answer example).
+- SessionStart reminder: asks for at least one pointed tease per reply, ties the hedge ban to labeling each guess once, and is compressed so the worst case measured (saved language sr-Latn-BA plus a locale hint) is 226 words, under the 230-word budget.
+
 ## 0.1.3 (2026-11-23)
 
 - Includes the 0.1.2 persona change below. 0.1.2 was tagged but never published: its SessionStart reminder exceeded the word budget on Windows. The reminder is now shorter and states that 매도 is Akane's core, even in long reports.
