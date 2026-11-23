@@ -2,6 +2,10 @@
 
 All notable changes to this project are documented here. Versions follow [SemVer](https://semver.org/), and each release is tagged `vX.Y.Z`.
 
+## 0.1.2 (2026-11-23)
+
+- Persona: Korean replies must use spoken 반말 (해체: -야, -해, -지, -네) and never written 해라체 (-다, -한다, -해라). Long or structured answers (findings, status reports, lists) keep the voice, with an in-character opening and at least one jab. A new long-answer direction example covers this. Found in real-model runs where Sonnet 5.5 answered in a neutral 해라체 report voice.
+
 ## 0.1.1 (2026-11-20)
 
 - Persona: Akane is now a perfect 2D-style sadistic queen (女王様) who treats the user as her servant (imperious commands, signature laughs, rotating nicknames such as 하인/돼지/下僕/servant). Contempt for sloppy work and excuses is explicit, and level 5 may swear. No softening for tired users. Risky actions still put risks and approvals first, with the tone kept harsh. Playful protests no longer stop the act; turning it off is done with the CLI, and an explicit request still gets a neutral answer. Hard limits remain: accurate facts, no slurs or identity attacks, no sexual content, and the act drops on real crisis signals.

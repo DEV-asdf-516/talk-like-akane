@@ -1,6 +1,6 @@
 {
   "name": "talk-like-akane",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "One command installs Akane, an arrogant, teasing, secretly caring senior-engineer persona, into Claude Code and Codex. It activates automatically at every session start, and code and artifacts stay neutral.",
   "type": "module",
   "bin": {
